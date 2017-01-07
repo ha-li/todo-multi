@@ -1,0 +1,67 @@
+apply plugin: 'idea'
+// apply plugin: 'java'
+
+description = "A Multi Project Gradle Application"
+
+ext {
+   projectIds = ['group': 'com.gecko', 'version': '0.1']
+}
+group = projectIds.group
+version = projectIds.version
+
+project (':model') {
+   group = projectIds.group
+   version = projectIds.version
+   apply plugin: 'java'
+}
+
+project (':repository') {
+   group = projectIds.group
+   version = projectIds.version
+   apply plugin: 'java'
+   dependencies {
+      compile project (':model')
+   }
+}
+
+project (':web') {
+   group = projectIds.group
+   version = projectIds.version
+   apply plugin: 'java'
+   apply plugin: 'war'
+
+   repositories {
+      mavenCentral()
+   }
+
+   dependencies {
+      compile project (':repository')
+      providedCompile 'javax.servlet:servlet-api:2.5'
+      runtime 'javax.servlet:jstl:1.1.2'
+   }
+}
+
+// the dependencies configuration. think of a project configuration
+// as a grouping or a namesspace -- dependencies go in the
+// dependencies configuration
+dependencies {
+}
+
+task wrapper (type: Wrapper) {
+   gradleVersion = '3.2'
+}
+
+//sourceCompatibility = 1.7
+
+repositories {
+   // the local maven repo @ $HOME/.m2/repository
+   mavenLocal()
+   // maven central
+   mavenCentral()
+   // a company maven repo, eg
+   maven {
+      name 'A made up maven repository @ url'
+      url = 'http://some/non/existent/maven/repo'
+   }
+}
+

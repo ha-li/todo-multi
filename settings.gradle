@@ -1,0 +1,5 @@
+// required for multi-project builds
+include 'repository'
+include 'web'
+include 'model'
+
