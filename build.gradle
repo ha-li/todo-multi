@@ -3,6 +3,16 @@ apply plugin: 'idea'
 // to apply the java plugin
 // apply plugin: 'java'
 
+// each subproject gets their own project configuration
+// which will declare
+// 1. any properties,
+// 2. plugins,
+// 3. dependencies and
+// 4. repositories
+
+
+description = "A Multi Project Gradle Application"
+
 //apply all the common behavior to all projects here
 allprojects {
    group = 'com.gecko'
@@ -13,63 +23,8 @@ allprojects {
 subprojects {
    apply plugin: 'java'
 }
-description = "A Multi Project Gradle Application"
-
-ext {
-   projectIds = ['group': 'com.gecko', 'version': '0.1']
-}
-
-// each subproject gets their own project configuration
-// which will declare
-// 1. any properties,
-// 2. plugins,
-// 3. dependencies and
-// 4. repositories
-project (':model') {
-   // nothing unique in project model yet
-}
-
-project (':repository') {
-   // repository picks up all behavior defined in allprojects and subprojects
-   // and then anything unique to repository gets added here
-   dependencies {
-      compile project (':model')
-   }
-}
-
-project (':web') {
-   // likewise all common stuff already defined else where
-   // now just need the stuff unique to web here
-   apply plugin: 'war'
-
-   repositories {
-      mavenCentral()
-   }
-
-   dependencies {
-      compile project (':repository')
-      providedCompile 'javax.servlet:servlet-api:2.5'
-      runtime 'javax.servlet:jstl:1.1.2'
-   }
-}
 
 task wrapper (type: Wrapper) {
    gradleVersion = '3.2'
 }
-
-//sourceCompatibility = 1.7
-
-/*
-repositories {
-   // the local maven repo @ $HOME/.m2/repository
-   mavenLocal()
-   // maven central
-   mavenCentral()
-   // a company maven repo, eg
-   maven {
-      name 'A made up maven repository @ url'
-      url = 'http://some/non/existent/maven/repo'
-   }
-}
-*/
 
