@@ -28,3 +28,15 @@ task wrapper (type: Wrapper) {
    gradleVersion = '3.2'
 }
 
+
+/*
+// try to write all the reports into one report
+// model uses testNG, repo uses junit, should be possible
+// just not sure how
+task aggregateTestReports (type: TestReport) {
+   destinationDir = subprojects.test.reports.html.destination
+   reportOn test, testNG
+}
+
+check.dependsOn aggregateTestReports
+*/

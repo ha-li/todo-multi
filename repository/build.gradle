@@ -1,15 +1,16 @@
-version 'unspecified'
-
 apply plugin: 'java'
 
 //sourceCompatibility = 1.5
 
 description = 'The repository tier'
 
+repositories {
+    mavenCentral()
+}
+
 // repository picks up all behavior defined in allprojects and subprojects
 // and then anything unique to repository gets added here
 dependencies {
     compile project(':model')
-
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
