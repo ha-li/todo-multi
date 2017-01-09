@@ -29,6 +29,14 @@ task wrapper (type: Wrapper) {
 }
 
 
+task explodeWar (type: Copy) {
+   into "$buildDir/explodedDist"
+   subprojects {
+      from tasks.withType(War)
+   }
+}
+
+
 /*
 // try to write all the reports into one report
 // model uses testNG, repo uses junit, should be possible
