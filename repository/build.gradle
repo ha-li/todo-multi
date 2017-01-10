@@ -14,3 +14,10 @@ dependencies {
     compile project(':model')
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
+
+// create sources jar in each sub project
+task sourcesJar (type: Jar) {
+   baseName = project.name
+   classifier = 'sources'
+   from sourceSets.main.allSource
+}

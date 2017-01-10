@@ -1,0 +1,5 @@
+<project>
+    <target name="ninjaGreet">
+        <echo>Hello Fellow Ninja!</echo>
+    </target>
+</project>

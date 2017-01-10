@@ -16,3 +16,10 @@ task testNG (type: Test) {
 }
 
 test.dependsOn (testNG)
+
+// create sources jar in each sub project
+task sourcesJar (type: Jar) {
+   baseName = project.name
+   classifier = 'sources'
+   from sourceSets.main.allSource
+}

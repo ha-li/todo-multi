@@ -1,7 +1,14 @@
-apply plugin: 'idea'
+allprojects {
+   apply plugin: 'idea'
+}
+
 // the root project does not have any code, so we do not need
 // to apply the java plugin
 // apply plugin: 'java'
+
+// import the ant file
+ant.importBuild 'build.xml'
+
 
 // each subproject gets their own project configuration
 // which will declare
@@ -36,7 +43,34 @@ task explodeWar (type: Copy) {
    }
 }
 
+// this is a task from the ant script
+// i'm extending it by adding doFirst and doLast
+// executing this will execute doFirst, then the ant
+// task, then doLast.
+ninjaGreet{
+   doFirst {
+      println "Fellow Ninja!"
+   }
 
+   doLast {
+      println 'Hello there!'
+   }
+}
+
+
+
+
+/* buildscript {
+   repositories {
+      mavenCentral ()
+   }
+
+   dependencies {
+      classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:0.9.7'
+   }
+}
+apply plugin: 'tomcat'
+*/
 /*
 // try to write all the reports into one report
 // model uses testNG, repo uses junit, should be possible
