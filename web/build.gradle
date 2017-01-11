@@ -1,14 +1,19 @@
+import dsl.GoogleClosureMinifier
 
+apply plugin: 'java'
+apply plugin: 'groovy'
 apply plugin: 'war'
 
 //sourceCompatibility = 1.5
 
 description = 'Good ole fashion lookie lookie'
 
-
 repositories {
    mavenCentral()
 
+   // an ivy repository configured to point to jquery host
+   // use this to download jquery library, and the artifact
+   // pattern is specified here, used in dependencies { ... }
    ivy {
       name 'JQuery'
       url 'http://code.jquery.com'
@@ -20,16 +25,23 @@ repositories {
 
 configurations {
    jquery
+   googleClosure
 }
 
 dependencies {
+   compile localGroovy()
+   compile gradleApi()
+   compile 'org.codehaus.groovy:groovy-all:2.4.7'
+
    compile project (':repository')
    providedCompile 'javax.servlet:servlet-api:2.5'
    runtime 'javax.servlet:jstl:1.1.2'
 
    testCompile group: 'junit', name: 'junit', version: '4.11'
 
-   // add a dependency on the jquery library
+   googleClosure 'com.google.javascript:closure-compiler:v20130603'
+
+   // add a dependency on the jquery library as per config above
    jquery group: 'jquery', name: 'jquery', version: '1.10.0', classifier: 'min', ext: 'js'
 }
 
@@ -47,4 +59,16 @@ task sourcesJar (type: Jar) {
    from sourceSets.main.allSource
 }
 
+///// add some extensions for minifying javascript code
+ext {
+   jsSourceDir = "$webAppDir/js/app"
+   jsOutputDir = "$buildDir/js"
+}
 
+def jsSourceFiles = fileTree (jsSourceDir).include ('*.js')
+
+task minifyJs (type: dsl.GoogleClosureMinifier) {
+   inputFiles = jsSourceFiles
+   outputFile = file ("$jsOutputDir/all-min.js")
+}
+///// end of minifying task and extension
