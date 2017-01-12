@@ -31,6 +31,11 @@ allprojects {
 // apply behavior common to sub projects here
 subprojects {
    apply plugin: 'java'
+   apply from: "$rootDir/gradle/jacoco.gradle"
+
+   repositories {
+      mavenCentral ()
+   }
 }
 
 task wrapper (type: Wrapper) {
@@ -60,34 +65,9 @@ ninjaGreet{
 }
 
 repositories {
-   mavenCentral()
+   mavenCentral ()
 }
 
 dependencies {
    compile 'org.codehaus.groovy:groovy-all:2.4.7'
 }
-
-
-
-/* buildscript {
-   repositories {
-      mavenCentral ()
-   }
-
-   dependencies {
-      classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:0.9.7'
-   }
-}
-apply plugin: 'tomcat'
-*/
-/*
-// try to write all the reports into one report
-// model uses testNG, repo uses junit, should be possible
-// just not sure how
-task aggregateTestReports (type: TestReport) {
-   destinationDir = subprojects.test.reports.html.destination
-   reportOn test, testNG
-}
-
-check.dependsOn aggregateTestReports
-*/
