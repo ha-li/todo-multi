@@ -1,0 +1,12 @@
+//apply plugin: 'groovy'
+
+repositories {
+   mavenCentral ()
+}
+
+dependencies {
+   compile localGroovy()
+   compile gradleApi()
+
+   compile 'org.codehaus.groovy:groovy-all:2.4.7'
+}

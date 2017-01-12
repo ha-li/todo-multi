@@ -1,9 +1,9 @@
 import dsl.GoogleClosureMinifier
 
-apply plugin: 'java'
-apply plugin: 'groovy'
+//apply plugin: 'java'
+//apply plugin: 'groovy'
 apply plugin: 'war'
-
+//apply plugin: 'groovy'
 //sourceCompatibility = 1.5
 
 description = 'Good ole fashion lookie lookie'
@@ -29,8 +29,8 @@ configurations {
 }
 
 dependencies {
-   compile localGroovy()
-   compile gradleApi()
+   //compile localGroovy()
+   //compile gradleApi()
    compile 'org.codehaus.groovy:groovy-all:2.4.7'
 
    compile project (':repository')
@@ -72,3 +72,4 @@ task minifyJs (type: dsl.GoogleClosureMinifier) {
    outputFile = file ("$jsOutputDir/all-min.js")
 }
 ///// end of minifying task and extension
+

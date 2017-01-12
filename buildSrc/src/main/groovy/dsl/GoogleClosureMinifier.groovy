@@ -15,6 +15,9 @@ class GoogleClosureMinifier extends DefaultTask {
 
    @TaskAction
    public void minify () {
+      // look at google's package naming convention
+      // com.google.javascript.jscomp.ant...
+      // so this class should be packaged under [com.gecko.gradle.api]
       ant.taskdef (name: 'jscomp',
          classname: 'com.google.javascript.jscomp.ant.CompileTask',
          classpath: project.configurations.googleClosure.asPath
