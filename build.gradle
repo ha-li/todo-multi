@@ -1,3 +1,4 @@
+import dsl.XsltReport
 
 allprojects {
    apply plugin: 'idea'
@@ -36,6 +37,8 @@ subprojects {
    // reference the jacoco plugin defined here
    apply from: "$rootDir/gradle/jacoco.gradle"
 
+   ext.configDir = new File (rootDir, 'config')
+   // apply from: "$rootDir/gradle/checkstyle.gradle"
    repositories {
       mavenCentral ()
    }
