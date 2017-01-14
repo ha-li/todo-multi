@@ -1,3 +1,4 @@
+
 allprojects {
    apply plugin: 'idea'
 }
@@ -31,12 +32,16 @@ allprojects {
 // apply behavior common to sub projects here
 subprojects {
    apply plugin: 'java'
+
+   // reference the jacoco plugin defined here
    apply from: "$rootDir/gradle/jacoco.gradle"
 
    repositories {
       mavenCentral ()
    }
 }
+
+test.dependsOn (subprojects.test)
 
 task wrapper (type: Wrapper) {
    gradleVersion = '3.2'

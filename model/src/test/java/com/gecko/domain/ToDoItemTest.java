@@ -24,4 +24,39 @@ public class ToDoItemTest {
       Assert.assertEquals(complete, toDoItem.isCompleted ());
    }
 
+   @Test
+   public void test_Compare_0 () {
+      ToDoItem one = new ToDoItem ();
+      one.setId (1L);
+
+      ToDoItem two = new ToDoItem ();
+      two.setId (1L);
+
+      int compare = one.compareTo (two);
+      Assert.assertTrue (compare == 0);
+   }
+
+   @Test
+   public void test_Compare_1 () {
+      ToDoItem one = new ToDoItem ();
+      one.setId (1L);
+
+      ToDoItem two = new ToDoItem ();
+      two.setId (2L);
+
+      int compare = one.compareTo (two);
+      Assert.assertTrue (compare == -1);
+   }
+
+   @Test
+   public void test_Compare_2 () {
+      ToDoItem one = new ToDoItem ();
+      one.setId (1L);
+
+      ToDoItem two = new ToDoItem ();
+      two.setId (2L);
+
+      int compare = two.compareTo (one);
+      Assert.assertTrue (compare == 1);
+   }
 }
