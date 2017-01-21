@@ -3,3 +3,8 @@ include 'repository'
 include 'web'
 include 'model'
 
+// you can change the name of a project like so
+// but then everywhere else you reference :model you
+// need to use Monkey instead
+// project(':model').name = 'Monkey'
+println project(':model').name

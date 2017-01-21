@@ -1,4 +1,4 @@
-apply plugin: 'java'
+//apply plugin: 'java'
 
 //sourceCompatibility = 1.5
 
@@ -20,4 +20,22 @@ task sourcesJar (type: Jar) {
    baseName = project.name
    classifier = 'sources'
    from sourceSets.main.allSource
+}
+
+artifacts {
+   archives sourcesJar
+}
+
+assemble.dependsOn sourcesJar
+
+distributions {
+   main {
+      baseName = archivesBaseName
+
+      contents {
+         from (libsDir) {
+            include sourcesJar.archiveName
+         }
+      }
+   }
 }

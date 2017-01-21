@@ -59,6 +59,12 @@ task sourcesJar (type: Jar) {
    from sourceSets.main.allSource
 }
 
+artifacts {
+   archives sourcesJar
+}
+
+assemble.dependsOn sourcesJar
+
 ///// add some extensions for minifying javascript code
 ext {
    jsSourceDir = "$webAppDir/js/app"

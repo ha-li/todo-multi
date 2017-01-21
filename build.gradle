@@ -1,9 +1,5 @@
 import dsl.XsltReport
 
-allprojects {
-   apply plugin: 'idea'
-}
-
 apply plugin: 'groovy'
 
 // the root project does not have any code, so we do not need
@@ -13,7 +9,6 @@ apply plugin: 'groovy'
 // import the ant file
 ant.importBuild 'build.xml'
 
-
 // each subproject gets their own project configuration
 // which will declare
 // 1. any properties,
@@ -21,11 +16,17 @@ ant.importBuild 'build.xml'
 // 3. dependencies and
 // 4. repositories
 
-
 description = "A Multi Project Gradle Application"
+
+task wrapper (type: Wrapper) {
+   // specify the gradle version to use with wrapper
+   gradleVersion = '3.2'
+}
 
 //apply all the common behavior to all projects here
 allprojects {
+   apply plugin: 'idea'
+
    group = 'com.gecko'
    version = '0.1'
 }
@@ -33,6 +34,7 @@ allprojects {
 // apply behavior common to sub projects here
 subprojects {
    apply plugin: 'java'
+   apply plugin: 'distribution'
 
    // reference the jacoco plugin defined here
    apply from: "$rootDir/gradle/jacoco.gradle"
@@ -45,10 +47,6 @@ subprojects {
 }
 
 test.dependsOn (subprojects.test)
-
-task wrapper (type: Wrapper) {
-   gradleVersion = '3.2'
-}
 
 
 task explodeWar (type: Copy) {
@@ -74,8 +72,79 @@ ninjaGreet{
 
 repositories {
    mavenCentral ()
+   maven {
+      url uri ('../gradle-plugins')
+   }
 }
 
 dependencies {
    compile 'org.codehaus.groovy:groovy-all:2.4.7'
+   //classpath group: 'com.gecko', name: 'gradle-plugins', version: '0.1'
+}
+
+/**
+ * Some cool stuff to illustrate how gradle works.
+ *  1. define a class called DependencySpec that has a method testCompile
+ *  2. testCompile takes in a String, and outputs the string "adding ... library..."
+ *
+ *  3. define a method called 'dependencies2' that takes a closure
+ *     (we'll explain what the method does in a sec)
+ *  4. we make a method call to dependencies2, and in that method we call testCompile ('junit...')
+ *
+ *There should be some weird stuff here that confuses you...
+ *  a. when calling dependencies2 we pass in a closure that makes a method call testCompile...
+ *     but the method testCompile is not defined in the closure,
+ *     it is defined in the class DependencySpec, that's what the method dependencies2
+ *     is doing. dependencies2 is passed in a Closure object, and it
+ *     delegates the closure to the DependencySpec object, so anything that
+ *     happens inside the closure is invoked/delegated to the DependencySpec obj,
+ *     which does have the testCompile method defined
+ */
+class DependencySpec {
+   def testCompile (String libraryIdentifier) {
+      println "adding the $libraryIdentifier library..."
+   }
+
+   def doNothing () {
+      println "doing nothing in Dependency Spec"
+   }
+}
+
+def dependencies2 (Closure configurationClosure) {
+   def dependencySpec = new DependencySpec ()
+   configurationClosure.delegate = dependencySpec
+   configurationClosure.resolveStrategy = Closure.DELEGATE_FIRST
+   configurationClosure ()
+}
+
+def doNothing (Closure configuration) {
+   println "doing nothing in space"
+}
+
+dependencies2 {
+   testCompile "junit:junit:4.11"
+   doNothing ()
+}
+
+doNothing ({})
+
+
+// run the following on the command line
+// gradle -1 printProperties -PcommandLineProp=commandlineProperties -Dorg.gradle.project.systemProjectProp=MonkeyButt
+task printProperties {
+   doLast {
+      println gradlePropertiesProp
+      // when running gradle, add this to the command line argument
+      // -PcommandLineProp=AValue
+      println commandLineProp
+      // this needs to be set in your env properties as ORG_GRADLE_PROJECT_envProjectProf=SomeValue
+      // this will print out SomeValue
+      println envProjectProp
+
+      println ( hasProperty('system') ? System.properties['system'] : "" )
+
+      // this needs to be defined as org.gradle.project.sytemProjectProp=AnotherValue
+      // and this will print out AnotherValue
+      println systemProjectProp
+   }
 }
