@@ -1,10 +1,7 @@
 import dsl.GoogleClosureMinifier
 
-//apply plugin: 'java'
-//apply plugin: 'groovy'
 apply plugin: 'war'
 //apply plugin: 'groovy'
-//sourceCompatibility = 1.5
 
 description = 'Good ole fashion lookie lookie'
 
@@ -31,7 +28,7 @@ configurations {
 dependencies {
    //compile localGroovy()
    //compile gradleApi()
-   compile 'org.codehaus.groovy:groovy-all:2.4.7'
+   //compile 'org.codehaus.groovy:groovy-all:2.4.7'
 
    compile project (':repository')
    providedCompile 'javax.servlet:servlet-api:2.5'

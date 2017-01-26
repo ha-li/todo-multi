@@ -1,5 +1,6 @@
 import dsl.XsltReport
 
+
 apply plugin: 'groovy'
 
 // the root project does not have any code, so we do not need
@@ -41,13 +42,9 @@ subprojects {
 
    ext.configDir = new File (rootDir, 'config')
    // apply from: "$rootDir/gradle/checkstyle.gradle"
-   repositories {
-      mavenCentral ()
-   }
 }
 
-test.dependsOn (subprojects.test)
-
+//test.dependsOn (subprojects.test)
 
 task explodeWar (type: Copy) {
    into "$buildDir/explodedDist"
@@ -127,24 +124,3 @@ dependencies2 {
 }
 
 doNothing ({})
-
-
-// run the following on the command line
-// gradle -1 printProperties -PcommandLineProp=commandlineProperties -Dorg.gradle.project.systemProjectProp=MonkeyButt
-task printProperties {
-   doLast {
-      println gradlePropertiesProp
-      // when running gradle, add this to the command line argument
-      // -PcommandLineProp=AValue
-      println commandLineProp
-      // this needs to be set in your env properties as ORG_GRADLE_PROJECT_envProjectProf=SomeValue
-      // this will print out SomeValue
-      println envProjectProp
-
-      println ( hasProperty('system') ? System.properties['system'] : "" )
-
-      // this needs to be defined as org.gradle.project.sytemProjectProp=AnotherValue
-      // and this will print out AnotherValue
-      println systemProjectProp
-   }
-}
