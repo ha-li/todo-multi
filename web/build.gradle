@@ -49,19 +49,6 @@ task fetchExternalJs (type: Copy) {
    into "$webAppDir/js/ext"
 }
 
-// create sources jar in each sub project
-task sourcesJar (type: Jar) {
-   baseName = project.name
-   classifier = 'sources'
-   from sourceSets.main.allSource
-}
-
-artifacts {
-   archives sourcesJar
-}
-
-assemble.dependsOn sourcesJar
-
 ///// add some extensions for minifying javascript code
 ext {
    jsSourceDir = "$webAppDir/js/app"
@@ -76,3 +63,20 @@ task minifyJs (type: dsl.GoogleClosureMinifier) {
 }
 ///// end of minifying task and extension
 
+task createBuildInfoFile {
+   doLast {
+      def buildInfoFile = new File("$buildDir/build-info.properties")
+      Properties props = new Properties()
+      props.setProperty('version', project.version.toString())
+      props.setProperty('timestamp', project.buildTimeStamp)
+      props.store(buildInfoFile.newWriter(), null)
+   }
+}
+
+war {
+   dependsOn createBuildInfoFile
+   from (buildDir) {
+      include 'build-info.properties'
+      into ('WEB-INF/classes')
+   }
+}

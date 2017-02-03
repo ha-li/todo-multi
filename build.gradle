@@ -27,21 +27,53 @@ task wrapper (type: Wrapper) {
 //apply all the common behavior to all projects here
 allprojects {
    apply plugin: 'idea'
+   apply from: "$rootDir/gradle/version.gradle"
 
    group = 'com.gecko'
-   version = '0.1'
+   //version = '0.1'
 }
 
 // apply behavior common to sub projects here
 subprojects {
    apply plugin: 'java'
    apply plugin: 'distribution'
+   apply plugin: 'maven-publish'
 
    // reference the jacoco plugin defined here
    apply from: "$rootDir/gradle/jacoco.gradle"
 
+
    ext.configDir = new File (rootDir, 'config')
    // apply from: "$rootDir/gradle/checkstyle.gradle"
+
+   // task for create source jar is added to all subprojects
+   task sourcesJar (type: Jar) {
+      classifier 'sources'
+      from sourceSets.main.allSource
+   }
+
+   artifacts {
+      // add the source jar to the list of artifacts
+      archives sourcesJar
+   }
+   
+   publishing {
+      publications {
+         plugin(MavenPublication) {
+            from components.java
+
+            // publishes sources to repo also
+            artifact sourcesJar
+         }
+      }
+
+      repositories {
+         maven {
+            name 'NexusRepo'
+            url "file://$projectDir/../repo"
+         }
+      }
+   }
 }
 
 //test.dependsOn (subprojects.test)
@@ -114,13 +146,14 @@ def dependencies2 (Closure configurationClosure) {
    configurationClosure ()
 }
 
+
 def doNothing (Closure configuration) {
    println "doing nothing in space"
 }
 
 dependencies2 {
    testCompile "junit:junit:4.11"
-   doNothing ()
+   //doNothing ()
 }
 
-doNothing ({})
+//doNothing ({})
